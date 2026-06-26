@@ -8,14 +8,16 @@ Adaptar a experiência da plataforma para dispositivos móveis com feedback tát
 
 ## Specs deste Épico
 
-| Spec | Título | Status |
-|------|--------|--------|
-| SPEC-4.01 | Adaptação Mobile (React Native + Skia) | 📝 DRAFT |
-| SPEC-4.02 | Feedback Tátil (Haptics) | 📝 DRAFT |
+| Spec | Título | Status | Requisitos |
+|------|--------|--------|------------|
+| [SPEC-4.01](SPEC-4.01-mobile-skia.md) | Adaptação Mobile (React Native + Skia) | 📝 DRAFT | — |
 
-## Escopo
+> **Nota:** Este épico será detalhado após a conclusão dos Épicos 1–3. A SPEC-4.01 contém o escopo direcional planejado.
 
-- Renderização nativa via react-native-skia
-- Feedback háptico contextualizado
-- Gestos multi-touch otimizados para fretboard
-- Responsividade adaptativa por tamanho de tela
+## Escopo Planejado
+
+- Renderização nativa via react-native-skia (GPU-accelerated)
+- Feedback háptico contextualizado (nota, acorde válido, fora do campo)
+- Gestos multi-touch otimizados (pinch-to-zoom, swipe, long press)
+- Responsividade adaptativa por tamanho de tela (phone vs. tablet)
+- Orientação landscape para fretboard, portrait para grafo
