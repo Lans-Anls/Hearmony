@@ -8,11 +8,12 @@ Este documento descreve **o que o usuário vê, toca e sente** ao usar a platafo
 
 ## 1. Mapa de Telas (Views)
 
-A plataforma possui **5 views** que o usuário navega. No desktop, várias coexistem na mesma tela; no mobile, alternam via tabs.
+A plataforma possui **6 views** que o usuário navega. A Landing Page é a tela de entrada; no desktop, as views da aplicação coexistem na mesma tela; no mobile, alternam via tabs.
 
 ```mermaid
 flowchart LR
-    subgraph "Tela Principal"
+    LP["🌀 Landing Page"] -->|"Entrar"| MAIN
+    subgraph MAIN ["Tela Principal"]
         A["🎵 Seletor de Contexto"]
         B["🕸️ Grafo de Harmonia"]
         C["🎸 Fretboard"]
@@ -29,6 +30,7 @@ flowchart LR
 
 | View | Função Principal | Requisito |
 |------|-----------------|-----------|
+| **Landing Page** | Recepção do usuário com animação interativa ao mouse | — |
 | **Seletor de Contexto** | Escolher nota raiz + tipo de escala | RF-01 |
 | **Grafo de Harmonia** | Visualizar e navegar entre acordes | RF-02, RF-05 |
 | **Fretboard** | Ver posições de acordes + montar acordes | RF-03, RF-04 |
@@ -397,17 +399,61 @@ As cores e animações comunicam **significado funcional**, não apenas estétic
 
 ## 6. Paleta Cromática Completa
 
-### Cores de Interface (Dark Mode)
+### Modo Claro / Escuro (Light & Dark Theme)
+
+A plataforma suporta **dois temas visuais** que o usuário pode alternar a qualquer momento. A preferência é persistida entre sessões e respeita `prefers-color-scheme` do sistema como valor inicial.
+
+#### Toggle de Tema
+
+| Elemento | Descrição |
+|----------|-----------|
+| **Localização** | Canto superior direito, ao lado do ícone de afinação |
+| **Ícone** | ☀️ (ativar claro) / 🌙 (ativar escuro) |
+| **Animação** | Rotação do ícone (180°) + transição suave de cores (400ms) |
+| **Persistência** | Salvo em localStorage, restaurado no próximo acesso |
+| **Padrão inicial** | Detecta `prefers-color-scheme` do SO; se indisponível, usa Dark |
+
+#### Tokens — Dark Mode (padrão)
 
 | Token | Hex | Uso |
 |-------|-----|-----|
 | `bg-primary` | `#0D1117` | Fundo principal |
 | `bg-secondary` | `#161B22` | Cards, painéis |
 | `bg-elevated` | `#21262D` | Dropdowns, modals |
+| `bg-fretboard` | `#1A1A2E` | Fundo do fretboard |
 | `border-default` | `#30363D` | Bordas |
 | `text-primary` | `#F0F6FC` | Texto principal |
 | `text-secondary` | `#8B949E` | Labels, hints |
 | `accent` | `#58A6FF` | Links, ações |
+| `graph-bg` | `#0D1117` | Fundo do grafo com gradiente radial sutil |
+| `node-shadow` | `rgba(0,0,0,0.6)` | Sombra dos nós do grafo |
+
+#### Tokens — Light Mode
+
+| Token | Hex | Uso |
+|-------|-----|-----|
+| `bg-primary` | `#FFFFFF` | Fundo principal |
+| `bg-secondary` | `#F6F8FA` | Cards, painéis |
+| `bg-elevated` | `#EAEEF2` | Dropdowns, modals |
+| `bg-fretboard` | `#F0EDE5` | Fundo do fretboard (tom amadeirado leve) |
+| `border-default` | `#D0D7DE` | Bordas |
+| `text-primary` | `#1F2328` | Texto principal |
+| `text-secondary` | `#656D76` | Labels, hints |
+| `accent` | `#0969DA` | Links, ações |
+| `graph-bg` | `#F6F8FA` | Fundo do grafo com gradiente radial sutil |
+| `node-shadow` | `rgba(0,0,0,0.12)` | Sombra dos nós do grafo |
+
+#### Regras de Adaptação por Tema
+
+| Componente | Dark Mode | Light Mode |
+|------------|-----------|------------|
+| **Cores semânticas de acordes** | Mantidas iguais (verde, azul, vermelho) | Mantidas iguais — alto contraste em ambos |
+| **Cores de intervalo no fretboard** | Mantidas iguais (12 cores) | Mantidas iguais — vibrantes sobre fundo claro |
+| **Nó selecionado** | Branco `#FFFFFF` com glow | Preto `#1F2328` com glow |
+| **Arestas do grafo** | Branco translúcido `rgba(255,255,255,0.3)` | Cinza escuro `rgba(31,35,40,0.3)` |
+| **Bordas do fretboard** | Cinza claro `#8B949E` | Marrom escuro `#57534E` |
+| **Texto nos nós** | Branco sobre fundo colorido | Branco sobre fundo colorido (mantido) |
+| **Tooltips** | Fundo `#21262D`, texto branco | Fundo `#1F2328`, texto branco |
 
 ### Cores Semânticas de Acordes (da SPEC-3.01)
 
@@ -479,10 +525,100 @@ As cores e animações comunicam **significado funcional**, não apenas estétic
 
 ---
 
-## 9. Resumo: Requisito → Experiência do Usuário
+## 9. Landing Page — Tela de Boas-Vindas Interativa
+
+A Landing Page é a **primeira experiência visual** do usuário com o Hearmony. Deve causar impacto imediato e comunicar a essência do projeto: harmonia musical como uma rede viva de conexões.
+
+### Conceito Visual
+
+A tela exibe um **grafo de partículas generativo** que reage à movimentação do mouse do usuário. As partículas representam notas e formam constelações que evocam campos harmônicos, criando uma metáfora visual entre a interação do usuário e a exploração musical.
+
+### Wireframe
+
+```
+┌──────────────────────────────────────────────────────┐
+│                                            ☀️/🌙    │
+│                                                      │
+│            ·  · ·                                    │
+│          ·       · ·    ← partículas reagem          │
+│        ·    ✦        ·     ao cursor do mouse         │
+│          ·       · ·                                  │
+│            · · ·                                      │
+│                                                      │
+│              🎵 Hearmony                              │
+│     "Descubra harmonia através de grafos"             │
+│                                                      │
+│           [ Começar a Explorar → ]                   │
+│                                                      │
+│     Guitarra  ·  Baixo  ·  Ukulele                   │
+│                                                      │
+└──────────────────────────────────────────────────────┘
+```
+
+### Animação Interativa — Comportamento do Mouse
+
+| Comportamento | Descrição | Parâmetros |
+|---------------|-----------|------------|
+| **Atração** | Partículas próximas ao cursor são atraídas suavemente em sua direção | Raio: 150px, Força: 0.05 |
+| **Repulsão (clique)** | Ao clicar, partículas explodem para fora a partir do cursor | Raio: 200px, Força: 0.3, Decay: 1s |
+| **Conexões dinâmicas** | Partículas dentro de uma distância formam linhas translúcidas entre si (simulando arestas de grafo) | Distância máx: 120px, Opacidade: 0.15 |
+| **Idle drift** | Sem interação, partículas flutuam suavemente em movimento browniano | Velocidade: 0.3px/frame |
+| **Parallax** | Camadas de partículas se movem em velocidades diferentes conforme o mouse se desloca | 3 camadas: 0.5x, 1x, 1.5x |
+| **Glow no hover** | Partículas sob o cursor ganham glow colorido (cores semânticas aleatórias: verde, azul, vermelho) | Transition: 200ms |
+
+### Elementos da Landing Page
+
+| Elemento | Descrição Visual | Interação |
+|----------|------------------|-----------|
+| **Canvas de partículas** | Fullscreen, fundo dark/light conforme tema ativo | Reage ao mouse (atração, parallax) |
+| **Logotipo "Hearmony"** | Tipografia grande, centralizada, com leve glow | Fade-in ao carregar (1s delay) |
+| **Subtítulo** | "Descubra harmonia através de grafos" — fonte light | Fade-in escalonado (1.5s delay) |
+| **CTA "Começar a Explorar"** | Botão pill com gradiente sutil + ícone de seta | Hover: cresce 1.05x + glow. Clique: transição para app |
+| **Seletor de instrumento** | 3 ícones (guitarra, baixo, ukulele) com labels discretos | Clique pré-seleciona o instrumento antes de entrar |
+| **Toggle de tema** | ☀️/🌙 no canto superior direito | Muda tema da landing + persiste para a app |
+| **Partículas → Grafo** | Ao clicar "Começar", as partículas se reorganizam formando um grafo de 7 nós | Animação de transição 800ms: caos → ordem |
+
+### Transição Landing → Aplicação
+
+```mermaid
+flowchart LR
+    A["Partículas aleatórias"] -->|"Clique no CTA"| B["Partículas convergem\npara 7 posições"]
+    B -->|"800ms"| C["Formam o grafo\ndo campo harmônico"]
+    C -->|"400ms"| D["UI principal\naparece ao redor"]
+```
+
+1. Partículas flutuantes se reorganizam para as 7 posições de nó do grafo
+2. Linhas entre partículas engrossam e se tornam arestas ponderadas
+3. Labels (I, ii, iii...) aparecem com fade-in
+4. Seletor de contexto, fretboard e painéis surgem com slide-in lateral
+5. Toda a transição dura ~1.5s
+
+### Especificações Técnicas da Animação
+
+| Propriedade | Valor |
+|-------------|-------|
+| **Tecnologia** | HTML5 Canvas 2D ou WebGL (para performance) |
+| **Partículas** | 80–120 (desktop), 40–60 (mobile) |
+| **FPS alvo** | 60fps constante |
+| **Fallback mobile** | Partículas respondem ao toque (touch events) em vez do mouse |
+| **Acessibilidade** | `prefers-reduced-motion`: desativa animação, mostra versão estática |
+| **Performance** | requestAnimationFrame com throttle; pausa quando tab não está visível |
+
+### Arte Necessária para a Landing Page
+
+- [ ] **Logotipo Hearmony** — Versões dark e light, com e sem tagline
+- [ ] **Ícones de instrumento** — Guitarra, Baixo, Ukulele (outline, 24px e 48px)
+- [ ] **Botão CTA** — Design pill com gradiente (idle, hover, pressed)
+- [ ] **Favicon** — Versão minimalista do logo para aba do navegador
+- [ ] **OG Image** — Preview para redes sociais (1200×630px)
+
+---
+
+## 10. Resumo: Requisito → Experiência do Usuário
 
 | Requisito | O que o Usuário Vê | O que o Usuário Faz | O que o Usuário Sente |
 |-----------|--------------------|--------------------|----------------------|
+| **Landing** | Grafo de partículas vivo e reativo | Move o mouse, vê partículas dançarem | Fascínio e curiosidade |
 | **RF-01** | 12 notas + dropdown de escala | Clica na nota, seleciona escala | Controle imediato da tonalidade |
 | **RF-02** | Grafo com 7 nós coloridos e arestas | Observa relações entre acordes | Compreensão visual da harmonia |
 | **RF-03** | Nó selecionado + fretboard atualizado | Clica no nó e vê posições no braço | Conexão direta teoria → prática |
