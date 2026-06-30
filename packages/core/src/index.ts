@@ -19,3 +19,7 @@ export * from './engine/index.js';
 
 // Chromatic Validator
 export * from './validator/index.js';
+
+// Global State Store (SPEC-2.02)
+export * from './store/index.js';
+

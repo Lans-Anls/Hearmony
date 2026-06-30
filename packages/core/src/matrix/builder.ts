@@ -20,6 +20,7 @@ import {
   MOVEMENT_MAP,
   SCALE_INTERVALS,
   TRIAD_INTERVALS,
+  getMatrixForScale,
 } from './constants.js';
 
 // ---------------------------------------------------------------------------
@@ -167,19 +168,12 @@ export function buildHarmonyGraph(
 
 /**
  * Retorna a matriz de adjacência para o tipo de escala.
- * Para escalas maiores, retorna a matriz base.
- * Para outros tipos, retorna a mesma base (extensível no futuro — CA-06).
+ * Utiliza a função `getMatrixForScale` que cobre todas as escalas suportadas.
+ *
+ * Ref: SPEC-1.01 CA-06
  */
 export function getAdjacencyMatrix(
   scale: ScaleType,
 ): readonly (readonly number[])[] {
-  // Atualmente, a matriz base é usada para todas as escalas.
-  // Matrizes específicas para menores serão implementadas na SPEC-1.02.
-  switch (scale) {
-    case 'major':
-      return MAJOR_ADJACENCY_MATRIX;
-    default:
-      // Placeholder: usa a mesma base, ajustes futuros conforme CA-06
-      return MAJOR_ADJACENCY_MATRIX;
-  }
+  return getMatrixForScale(scale);
 }

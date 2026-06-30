@@ -54,6 +54,85 @@ export const MAJOR_ADJACENCY_MATRIX: readonly (readonly number[])[] = [
   [   6,   0,   0,   5,   0,   0,   0 ],   // vii° (vii°→I=6: trítono)
 ];
 
+/**
+ * Matriz de adjacência para Menor Natural (Eólica).
+ *
+ * Graus: i, ii°, III, iv, v, VI, VII
+ * Pesos ajustados para o modo eólico:
+ * - v→i (7): Cadência modal (v é menor, sem trítono, resolução mais suave)
+ * - VII→III (9): Progressão modal forte do subtônico
+ * - iv→i (8): Plagal menor
+ * - VI→VII (8): Progressão descendente modal
+ * - III→VI (7): Terças descendentes
+ */
+export const MINOR_NATURAL_ADJACENCY_MATRIX: readonly (readonly number[])[] = [
+  //  i   ii°  III   iv    v   VI  VII
+  [   0,   3,   0,   8,   5,   6,   5 ],   // i
+  [   5,   0,   0,   0,   7,   6,   0 ],   // ii°
+  [   4,   0,   0,   0,   0,   7,   9 ],   // III  (III→VII=9)
+  [   8,   4,   4,   0,   7,   8,   0 ],   // iv   (iv→i=8 plagal menor)
+  [   7,   0,   0,   0,   0,   6,   0 ],   // v    (v→i=7 cadência modal suave)
+  [   5,   0,   7,   4,   4,   0,   8 ],   // VI   (VI→VII=8)
+  [   6,   0,   8,   5,   0,   0,   0 ],   // VII  (VII→III=8, VII→i=6)
+];
+
+/**
+ * Matriz de adjacência para Menor Harmônica.
+ *
+ * Graus: i, ii°, III+, iv, V, VI, vii°
+ * Pesos ajustados para a presença do VII° elevado:
+ * - V→i  (10): Cadência autêntica forte (V é maior, trítono resolvido)
+ * - vii°→i (9): Sensível pronunciada → resolução
+ * - iv→V  (9): Preparação dominante clássica
+ * - III+→VI (6): Acorde aumentado cria tensão
+ */
+export const MINOR_HARMONIC_ADJACENCY_MATRIX: readonly (readonly number[])[] = [
+  //  i   ii°  III+  iv    V   VI  vii°
+  [   0,   3,   0,   8,   6,   5,   7 ],   // i
+  [   5,   0,   0,   0,   9,   6,   0 ],   // ii°  (ii°→V=9 preparação)
+  [   3,   0,   0,   0,   0,   6,   0 ],   // III+ (aumentado, tensão)
+  [   8,   4,   4,   0,   9,   8,   0 ],   // iv   (iv→V=9)
+  [  10,   0,   0,   0,   0,   7,   0 ],   // V    (V→i=10 autêntica)
+  [   5,   0,   5,   4,   4,   0,   0 ],   // VI
+  [   9,   0,   0,   5,   0,   0,   0 ],   // vii° (vii°→i=9 sensível forte)
+];
+
+/**
+ * Matriz de adjacência para Menor Melódica (ascendente).
+ *
+ * Graus: i, ii, III+, IV, V, vi°, vii°
+ * Características especiais:
+ * - Dois graus diminutos (vi° e vii°) tornam a escala mais tensa
+ * - ii→V (9): Preparação clássica de jazz
+ * - V→i  (10): Cadência autêntica
+ * - IV→V  (9): Subdominante → dominante
+ */
+export const MINOR_MELODIC_ADJACENCY_MATRIX: readonly (readonly number[])[] = [
+  //  i   ii  III+  IV    V  vi°  vii°
+  [   0,   3,   0,   8,   6,   4,   5 ],   // i
+  [   5,   0,   0,   0,   9,   6,   0 ],   // ii   (ii→V=9)
+  [   4,   0,   0,   0,   0,   5,   0 ],   // III+
+  [   8,   4,   4,   0,   9,   7,   0 ],   // IV   (IV→V=9)
+  [  10,   0,   0,   0,   0,   7,   0 ],   // V    (V→i=10)
+  [   5,   0,   6,   4,   4,   0,   0 ],   // vi°
+  [   6,   0,   0,   5,   0,   0,   0 ],   // vii°
+];
+
+/**
+ * Retorna a matriz de adjacência para um tipo de escala.
+ * Ref: SPEC-1.01 CA-06
+ */
+export function getMatrixForScale(
+  scale: import('../types/music.js').ScaleType,
+): readonly (readonly number[])[] {
+  switch (scale) {
+    case 'major':          return MAJOR_ADJACENCY_MATRIX;
+    case 'minor_natural':  return MINOR_NATURAL_ADJACENCY_MATRIX;
+    case 'minor_harmonic': return MINOR_HARMONIC_ADJACENCY_MATRIX;
+    case 'minor_melodic':  return MINOR_MELODIC_ADJACENCY_MATRIX;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Mapa de Movimentos Harmônicos
 // ---------------------------------------------------------------------------

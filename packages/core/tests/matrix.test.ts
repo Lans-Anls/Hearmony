@@ -1,17 +1,21 @@
 /**
  * Testes — SPEC-1.01: Matriz de Adjacência Harmônica
  *
- * Valida os critérios de aceite CA-01 a CA-05.
+ * Valida os critérios de aceite CA-01 a CA-06.
  */
 
 import { describe, it, expect } from 'vitest';
 import {
   MAJOR_ADJACENCY_MATRIX,
+  MINOR_NATURAL_ADJACENCY_MATRIX,
+  MINOR_HARMONIC_ADJACENCY_MATRIX,
+  MINOR_MELODIC_ADJACENCY_MATRIX,
   DEGREE_LABELS,
   MOVEMENT_MAP,
   DEGREE_QUALITIES,
   SCALE_INTERVALS,
   TRIAD_INTERVALS,
+  getMatrixForScale,
 } from '../src/matrix/constants';
 import {
   buildDiatonicChords,
@@ -271,3 +275,86 @@ describe('buildHarmonyGraph', () => {
     }
   });
 });
+
+// ===========================================================================
+// CA-06: Matrizes para escalas menores derivam da base maior com ajustes
+// ===========================================================================
+describe('CA-06: Matrizes para Escalas Menores', () => {
+  it('getMatrixForScale retorna matrizes distintas para cada tipo de escala', () => {
+    const majorMatrix  = getMatrixForScale('major');
+    const naturalMatrix = getMatrixForScale('minor_natural');
+    const harmonicMatrix = getMatrixForScale('minor_harmonic');
+    const melodicMatrix  = getMatrixForScale('minor_melodic');
+
+    // Cada matriz deve ser diferente da maior
+    expect(naturalMatrix).not.toEqual(majorMatrix);
+    expect(harmonicMatrix).not.toEqual(majorMatrix);
+    expect(melodicMatrix).not.toEqual(majorMatrix);
+  });
+
+  it('todas as matrizes menores têm dimensão 7×7', () => {
+    const matrices = [
+      MINOR_NATURAL_ADJACENCY_MATRIX,
+      MINOR_HARMONIC_ADJACENCY_MATRIX,
+      MINOR_MELODIC_ADJACENCY_MATRIX,
+    ];
+    for (const matrix of matrices) {
+      expect(matrix).toHaveLength(7);
+      for (const row of matrix) {
+        expect(row).toHaveLength(7);
+      }
+    }
+  });
+
+  it('matrizes menores têm pesos no intervalo 0–10', () => {
+    const matrices = [
+      MINOR_NATURAL_ADJACENCY_MATRIX,
+      MINOR_HARMONIC_ADJACENCY_MATRIX,
+      MINOR_MELODIC_ADJACENCY_MATRIX,
+    ];
+    for (const matrix of matrices) {
+      for (const row of matrix) {
+        for (const w of row) {
+          expect(w).toBeGreaterThanOrEqual(0);
+          expect(w).toBeLessThanOrEqual(10);
+        }
+      }
+    }
+  });
+
+  it('buildHarmonyGraph gera 7 nós e arestas para minor_harmonic (A)', () => {
+    const graph = buildHarmonyGraph(createNote('A'), 'minor_harmonic');
+    expect(graph.nodes).toHaveLength(7);
+    expect(graph.edges.length).toBeGreaterThan(0);
+    // V→i deve ter peso 10 (cadência autêntica forte na menor harmônica)
+    const vToI = graph.edges.find(
+      (e) => e.source === graph.nodes[4].chordId && e.target === graph.nodes[0].chordId
+    );
+    expect(vToI?.weight).toBe(10);
+  });
+
+  it('buildHarmonyGraph gera 7 nós e arestas para minor_natural (A)', () => {
+    const graph = buildHarmonyGraph(createNote('A'), 'minor_natural');
+    expect(graph.nodes).toHaveLength(7);
+    // v→i = 7 (cadência modal suave, sem trítono)
+    const vToI = graph.edges.find(
+      (e) => e.source === graph.nodes[4].chordId && e.target === graph.nodes[0].chordId
+    );
+    expect(vToI?.weight).toBe(7);
+  });
+
+  it('buildHarmonyGraph para minor_harmonic: V é acorde maior (sensível resolvida)', () => {
+    const chords = buildDiatonicChords(createNote('A'), 'minor_harmonic');
+    // Grau 4 (index 4) deve ser E Major na menor harmônica de A
+    expect(chords[4].quality).toBe('major');
+    expect(chords[4].root.name).toBe('E');
+  });
+
+  it('buildHarmonyGraph para minor_natural: v é acorde menor', () => {
+    const chords = buildDiatonicChords(createNote('A'), 'minor_natural');
+    // Grau 4 (index 4) deve ser E Minor na menor natural de A
+    expect(chords[4].quality).toBe('minor');
+    expect(chords[4].root.name).toBe('E');
+  });
+});
+
