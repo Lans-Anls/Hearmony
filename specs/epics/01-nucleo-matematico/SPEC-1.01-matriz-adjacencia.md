@@ -77,14 +77,16 @@ Valores onde `0` indica ausência de aresta direta:
 
 ```
        I    ii   iii   IV    V    vi   vii°
-I   [  0,    3,    0,    8,   10,    5,    6 ]
-ii  [  5,    0,    0,    0,    0,    7,    0 ]
+I   [  0,    3,    0,    8,    6,    5,    6 ]
+ii  [  5,    0,    0,    0,    9,    7,    0 ]
 iii [  4,    0,    0,    0,    0,    3,    0 ]
-IV  [  8,    4,    5,    0,    3,    8,    0 ]
-V   [  6,    9,    0,    9,    0,    4,    0 ]
-vi  [  7,    0,    7,    3,    7,    0,    0 ]
-vii°[  0,    0,    0,    5,    0,    0,    0 ]
+IV  [  8,    4,    5,    0,    9,    8,    0 ]
+V   [ 10,    0,    0,    0,    0,    7,    0 ]
+vi  [  7,    0,    7,    3,    4,    0,    0 ]
+vii°[  6,    0,    0,    5,    0,    0,    0 ]
 ```
+
+> **Nota:** Os pesos refletem a _direção_ do movimento. M[i][j] é o peso de i→j. Exemplo: V→I = 10 (cadência autêntica, resolução máxima), mas I→V = 6 (ida à dominante, tensão).
 
 > **Nota:** Esta é a matriz base para tonalidades maiores. Matrizes para menores (natural, harmônica, melódica) serão derivadas com ajustes nos pesos conforme alterações de grau.
 
