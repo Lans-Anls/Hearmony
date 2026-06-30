@@ -1,0 +1,531 @@
+/**
+ * Hearmony — Design System CSS
+ * Ref: SPEC-3.01 (CA-01 a CA-10)
+ *
+ * Todas as cores via CSS Custom Properties (tokens).
+ * Nenhuma cor hard-coded fora deste arquivo.
+ */
+
+/* Google Fonts import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ============================================================
+   Tokens de Design (SPEC-3.01 CA-10 — tudo via DesignTokens)
+   ============================================================ */
+:root {
+  /* Cores de qualidade de acorde */
+  --color-major:      #2ECC71;   /* CA-01 */
+  --color-minor:      #3498DB;   /* CA-02 */
+  --color-diminished: #E74C3C;   /* CA-03 */
+  --color-augmented:  #F39C12;
+
+  /* Fundo e superfícies */
+  --bg-primary:   #0d0f14;
+  --bg-surface:   #151820;
+  --bg-card:      rgba(255,255,255,0.04);
+  --bg-card-hover:rgba(255,255,255,0.07);
+
+  /* Texto */
+  --text-primary:   #f0f2f5;
+  --text-secondary: rgba(240,242,245,0.6);
+  --text-muted:     rgba(240,242,245,0.35);
+
+  /* Bordas */
+  --border-subtle: rgba(255,255,255,0.08);
+  --border-focus:  rgba(52,152,219,0.5);
+
+  /* Arestas do grafo (CA-04, CA-05) */
+  --edge-strong-width: 3px;    /* peso >= 8 */
+  --edge-medium-width: 2px;    /* peso 5-7 */
+  --edge-weak-width:   1px;    /* peso < 5 */
+  --edge-weak-dash:    6px 4px;
+
+  /* Espaçamento */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  40px;
+
+  /* Raio de borda */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+
+  /* Tipografia */
+  --font-sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Transições */
+  --transition-fast: 120ms ease;
+  --transition-mid:  220ms ease;
+  --transition-slow: 380ms cubic-bezier(.4,0,.2,1);
+}
+
+/* ============================================================
+   Reset e Base
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   Layout principal
+   ============================================================ */
+.app {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-xl);
+  background: rgba(13,15,20,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.app-logo h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--color-major), var(--color-minor));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+
+.logo-icon {
+  font-size: 1.8rem;
+}
+
+.app-main {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: auto 1fr;
+  gap: var(--space-md);
+  padding: var(--space-lg) var(--space-xl);
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ============================================================
+   Painel lateral de controles
+   ============================================================ */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  grid-row: 1 / 3;
+}
+
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  transition: border-color var(--transition-fast);
+}
+
+.panel:hover { border-color: rgba(255,255,255,0.12); }
+
+.panel-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: var(--space-md);
+}
+
+/* ============================================================
+   Seletor de contexto
+   ============================================================ */
+.context-selector {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.select-group { display: flex; flex-direction: column; gap: var(--space-xs); }
+.select-label { font-size: 0.8rem; color: var(--text-secondary); }
+
+.styled-select {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 10px var(--space-sm);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(240,242,245,0.5)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-sm) center;
+  padding-right: 32px;
+}
+
+.styled-select:hover { border-color: var(--border-focus); background-color: rgba(255,255,255,0.09); }
+.styled-select:focus { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+.styled-select option { background: var(--bg-surface); }
+
+/* ============================================================
+   Painel de afinação
+   ============================================================ */
+.tuning-panel { display: flex; flex-direction: column; gap: var(--space-sm); }
+
+.preset-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs);
+}
+
+.preset-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  padding: var(--space-xs) var(--space-sm);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.preset-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); border-color: rgba(255,255,255,0.2); }
+.preset-btn.active { background: rgba(52,152,219,0.2); border-color: var(--color-minor); color: var(--color-minor); }
+
+.capo-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-top: var(--space-xs);
+}
+
+.capo-label { font-size: 0.8rem; color: var(--text-secondary); }
+
+.capo-input {
+  width: 64px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 6px var(--space-sm);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* ============================================================
+   HarmonyGraph — SPEC-3.01
+   ============================================================ */
+.harmony-graph-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.harmony-graph {
+  width: 100%;
+  height: auto;
+  min-height: 340px;
+  background: radial-gradient(ellipse at 50% 40%, rgba(52,152,219,0.06), transparent 65%),
+              var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: visible;
+}
+
+/* Nós do grafo */
+.graph-node {
+  cursor: pointer;
+  transition: filter var(--transition-fast);
+}
+
+.graph-node:hover { filter: brightness(1.25) drop-shadow(0 0 10px rgba(255,255,255,0.2)); }
+.graph-node.selected { filter: drop-shadow(0 0 14px rgba(255,255,255,0.4)); }
+
+/* Arestas — CA-04 (contínua 3px), CA-05 (tracejada 1px) */
+.graph-edge { transition: stroke var(--transition-fast), stroke-width var(--transition-fast); }
+
+/* Recomendações */
+.recommendations {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.recs-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.recs-list { list-style: none; display: flex; flex-direction: column; gap: var(--space-xs); }
+
+.rec-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.rec-item:hover { background: var(--bg-card-hover); }
+
+.rec-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.rec-name { flex: 1; font-size: 0.88rem; color: var(--text-primary); }
+.rec-weight { font-size: 0.75rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+/* ============================================================
+   Fretboard — SPEC-3.02
+   ============================================================ */
+.fretboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.fretboard {
+  width: 100%;
+  height: auto;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm);
+  overflow: visible;
+}
+
+.fret-note { cursor: pointer; transition: filter var(--transition-fast); }
+.fret-note:hover { filter: brightness(1.3) drop-shadow(0 0 6px rgba(255,255,255,0.3)); }
+.note-bicolor { cursor: pointer; }
+
+.note-tooltip { pointer-events: none; font-family: var(--font-sans); }
+
+/* Resultado de validação */
+.validation-result {
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: center;
+  transition: all var(--transition-mid);
+}
+
+.validation-result.valid { background: rgba(46,204,113,0.15); border: 1px solid rgba(46,204,113,0.3); color: var(--color-major); }
+.validation-result.invalid { background: rgba(231,76,60,0.12); border: 1px solid rgba(231,76,60,0.25); color: var(--color-diminished); }
+.invalid-label { opacity: 0.75; }
+
+/* ============================================================
+   Glossário — Fretboard Legend
+   ============================================================ */
+.fretboard-glossary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  justify-content: center;
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  margin-top: var(--space-xs);
+}
+
+.glossary-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.glossary-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* ============================================================
+   Voicing Selector
+   ============================================================ */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  height: 60px;
+  background-color: var(--panel-bg);
+  border-bottom: 1px solid var(--border-color);
+  box-sizing: border-box;
+}
+
+.top-nav {
+  display: flex;
+  gap: 20px;
+  height: 100%;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.nav-link:hover {
+  color: #fff;
+}
+
+.nav-link.active {
+  color: var(--accent-color);
+  border-bottom: 2px solid var(--accent-color);
+}
+
+.voicing-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 12px;
+  border-radius: 20px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.voicing-btn {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 var(--space-xs);
+  transition: transform 0.2s;
+}
+
+.voicing-btn:hover {
+  transform: scale(1.2);
+  color: var(--color-major);
+}
+
+.voicing-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* ============================================================
+   Mode Toggle (Exploração / Prática)
+   ============================================================ */
+.mode-toggle {
+  display: flex;
+  background: rgba(255,255,255,0.05);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  gap: 3px;
+}
+
+.mode-btn {
+  flex: 1;
+  border: none;
+  border-radius: calc(var(--radius-md) - 3px);
+  padding: var(--space-xs) var(--space-md);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: transparent;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.mode-btn.active {
+  background: rgba(52,152,219,0.25);
+  color: var(--color-minor);
+}
+
+/* ============================================================
+   Estado vazio
+   ============================================================ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  text-align: center;
+  color: var(--text-muted);
+  min-height: 300px;
+}
+
+.empty-state .empty-icon { font-size: 3rem; opacity: 0.4; }
+.empty-state p { font-size: 0.9rem; max-width: 240px; }
+
+/* ============================================================
+   Responsividade — CA-08 (SPEC-3.01), CA-10 (SPEC-3.02)
+   ============================================================ */
+@media (max-width: 900px) {
+  .app-main {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    padding: var(--space-md);
+  }
+  .sidebar { grid-row: auto; }
+}
+
+@media (max-width: 600px) {
+  .app-header { padding: var(--space-sm) var(--space-md); }
+  .app-logo h1 { font-size: 1.1rem; }
+  .preset-grid { grid-template-columns: 1fr; }
+}
